@@ -23,3 +23,37 @@ def read_recipes(recipe):
             file.readline()
             cook_book[dish_name] = ingredients
     return cook_book
+
+
+def get_shop_list_by_dishes(dishes, person_count):
+    """
+    Функция возвращает словарь с названием ингредиентов и их количеством для блюд на заданное число персон
+    """"""
+    :param dishes:
+    :param person_count:
+    :return:
+    """
+    quantity_ingredients = {}
+    other_ingredients = {}
+    for dish in dishes:
+        for ingredients in read_recipes(cook_book)[dish]:
+            if ingredients["ingredient_name"] in quantity_ingredients:
+                other_ingredients[ingredients["ingredient_name"]] = {
+                    "measure": ingredients["measure"],
+                    "quantity": (int(ingredients["quantity"]) * int(person_count))
+                }
+            else:
+                quantity_ingredients[ingredients["ingredient_name"]] = {
+                    "measure": ingredients["measure"],
+                    "quantity": (int(ingredients["quantity"]) * int(person_count))
+                }
+                quantity_ingredients.update(other_ingredients)
+    return quantity_ingredients
+
+
+
+#pprint.pprint(cook_book)
+cook_book = "recipes.txt"
+read_recipes(cook_book)
+
+pprint.pprint(get_shop_list_by_dishes(['Запеченный картофель', 'Омлет'], 2))
